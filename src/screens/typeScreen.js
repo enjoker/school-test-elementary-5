@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  Alert
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
