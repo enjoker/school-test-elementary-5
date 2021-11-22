@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-native-elements';
 import styles from '../styles/style';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as userActions from '../store/actions/user';
 
@@ -28,80 +29,73 @@ import testScreen from '../screens/testScreen';
 import scoreScreen from '../screens/scoreScreen';
 import rankingScreen from '../screens/rankingScreen';
 import advertScreen from '../screens/advertScreen';
-
-// import {useRewardedAd} from '@react-native-admob/admob';
-
-const hookOptions = {
-  loadOnDismissed: true,
-  requestOptions: {
-    requestNonPersonalizedAdsOnly: true,
-  },
-};
+import AllAppScreen from '../screens/allAppScreen';
 
 const Navigator = () => {
   const dispatch = useDispatch();
   const checkUser = useSelector(state => state.user.userName);
   const loadingUser = useSelector(state => state.user.loadingUser);
-  const Stack = createNativeStackNavigator();  
+  const Stack = createNativeStackNavigator();
 
   useEffect(() => {
     const getUser = async () => {
       try {
         dispatch(userActions.getUser());
-      //  await AsyncStorage.removeItem('user')
-      //  await AsyncStorage.removeItem('privilege')
+        // await AsyncStorage.removeItem('user')
+        // await AsyncStorage.removeItem('privilege')
+        // await AsyncStorage.removeItem('adsTime')
       } catch (error) {
         console.log(error);
       }
     };
     getUser();
   }, []);
-  
+
   const MainLogo = () => {
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image
           source={require('../assets/images/SchooltestLogo.png')}
-          style={{width: 34, height: 24}}
+          style={{ width: 34, height: 24 }}
         />
         <Text
-          style={[styles.textMedium16, {marginHorizontal: 5, color: '#555'}]}>
+          style={[styles.textMedium16, { marginHorizontal: 5, color: '#555' }]}>
           School Test Lite
         </Text>
       </View>
     );
   };
 
-  const clearStackOptions = ({navigation}) => ({
+  const clearStackOptions = ({ navigation }) => ({
     title: '',
     headerLeft: () => {
       return <MainLogo />;
     },
     headerRight: () => {
-      return (     
-          <TouchableOpacity           
-            onPress={() => navigation.popToTop()}>
-            <HomeIcon width={26} height={26} />
-          </TouchableOpacity>       
+      return (
+        <TouchableOpacity
+          onPress={() => navigation.popToTop()}>
+          <HomeIcon width={26} height={26} />
+        </TouchableOpacity>
       );
     },
   });
 
-  const screenOptions = ({navigation}) => ({
+  const screenOptions = ({ navigation }) => ({
     headerTitle: () => {
       return <MainLogo />;
     },
     headerRight: () => {
-      return (               
-          <TouchableOpacity            
-            onPress={() => navigation.popToTop()}>
-            <HomeIcon width={26} height={26} />
-          </TouchableOpacity>   
+      return (
+        <TouchableOpacity
+          onPress={() => navigation.popToTop()}>
+          <HomeIcon width={26} height={26} />
+        </TouchableOpacity>
       );
     },
   });
 
-  const screenRename = ({navigation}) => ({
+  const screenRename = ({ navigation }) => ({
     headerTitle: () => {
       return <MainLogo />;
     },
@@ -114,7 +108,7 @@ const Navigator = () => {
     },
   });
 
-  const AppNavigator = ({navigation}) => {
+  const AppNavigator = ({ navigation }) => {
     return (
       <Stack.Navigator>
         {checkUser === null && loadingUser === false ? (
@@ -122,12 +116,12 @@ const Navigator = () => {
             <Stack.Screen
               name="register"
               component={registerScreen}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="advert"
               component={advertScreen}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
           </>
         ) : checkUser !== null && loadingUser === false ? (
@@ -167,12 +161,17 @@ const Navigator = () => {
               component={renameScreen}
               options={screenOptions}
             />
+            <Stack.Screen
+              name="AllApp"
+              component={AllAppScreen}
+              options={{ title: "ดาวน์โหลดวิชาอื่น ๆ" }}
+            />
           </>
         ) : (
           <Stack.Screen
             name="loading"
             component={loadingScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
         )}
       </Stack.Navigator>
@@ -181,7 +180,7 @@ const Navigator = () => {
 
   return (
     <NavigationContainer>
-      <AppNavigator />      
+      <AppNavigator />
     </NavigationContainer>
   );
 };

@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  ImageBackground,
-  TouchableOpacity,
   SafeAreaView,
-  ScrollView,
   Dimensions,
   Alert
 } from 'react-native';
@@ -14,22 +11,11 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import styles from '../styles/style';
-import {
-  Image,
-  Icon,
-  Avatar,
-  normalize,
-  Card,
-  Input,
-} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image, Input } from 'react-native-elements';
 import * as userActions from '../store/actions/user';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 // import Ads
 import BannerAds from '../components/bannerAds'
-
-// import รูปบ้าน
-import HomeIcon from '../assets/images/icons/HomeIcon.svg';
 
 const registerScreen = ({ navigation }) => {
   const { width } = Dimensions.get('window');
@@ -41,11 +27,11 @@ const registerScreen = ({ navigation }) => {
     const advertPrivilege = async () => {
       console.log(name);
       if (name == '' || name == undefined || name == null) {
-        Alert.alert('แจ้งเตือน', 'กรุณาใส่ชื่อผู้ใช้งาน', [{text: 'ยืนยัน'}]);
+        Alert.alert('แจ้งเตือน', 'กรุณาใส่ชื่อผู้ใช้งาน', [{ text: 'ยืนยัน' }]);
         console.log('if');
       } else {
         dispatch(userActions.newPrivilege());
-        navigation.navigate('advert', {username: name});
+        navigation.navigate('advert', { username: name });
         console.log('else');
       }
     };
